@@ -1,0 +1,152 @@
+---
+title: "Example Analysis: Statistical Performance Indicators"
+bibliography: refs.bib
+---
+The SPI data used here originate from the World Bank \[@worldbank2023spi\],
+and are accessed via the TidyTuesday dataset curated by Nicola Rennie and the R4DS community \[@tidytuesday2025spi\].
+
+# Background
+
+**The Statistical Performance Indicators (SPI)**, developed by the World Bank, provide a quantitative assessment of how well national statistical systems perform across five dimensions:
+	1.	Data use
+	2.	Data services
+	3.	Data products
+	4.	Data sources
+	5.	Data infrastructure
+
+The SPI covers nearly all countries worldwide (≈ 99% of the global population) and spans 2004–2023.
+It serves as a diagnostic tool to strengthen national data systems.
+
+::: {.callout-note}
+Purpose: To monitor and improve national statistical systems’ capacity and performance.
+:::
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(scales)
+
+spi <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-02/spi_indicators.csv")
+
+glimpse(spi)
+```
+
+# Key Questions
+	1.	How has a country’s statistical performance changed over time?
+	2.	Is statistical performance related to income level or population size?
+	3.	Which pillar do countries score lowest in?
+
+::: {.column-margin}
+Small differences in SPI between countries may reflect data imprecision rather than true performance gaps.
+:::
+
+
+# Data Wrangling
+
+We clean and simplify the dataset to focus on major regions and income levels.
+
+```{r}
+#| warning: false
+
+spi_clean <- spi |>
+  filter(!is.na(overall_score)) |>
+  mutate(
+    income = fct_relevel(income, "Low income", "Lower middle income",
+                         "Upper middle income", "High income"),
+    region = fct_lump(region, n = 6)
+  ) |>
+  group_by(region, income, year) |>
+  summarise(
+    mean_spi = mean(overall_score, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+
+# Trend in Statistical Performance
+
+```{r}
+ggplot(spi_clean, aes(x = year, y = mean_spi, color = income)) +
+  geom_line(size = 1) +
+  facet_wrap(~ region, scales = "free_y") +
+  labs(
+    title = "Trends in Statistical Performance by Income and Region",
+    subtitle = "World Bank SPI 2004–2023",
+    x = "Year",
+    y = "Mean Overall SPI Score",
+    color = "Income Level",
+    caption = "Data source: World Bank SPI, via TidyTuesday 2025-12-02"
+  ) +
+  theme_minimal()
+
+```
+
+
+
+# Relationship with Population Size
+
+We explore whether countries with larger populations have higher or lower SPI.
+
+```{r}
+spi_recent <- spi |>
+  filter(year == 2023, !is.na(population), !is.na(overall_score))
+
+ggplot(spi_recent, aes(x = population, y = overall_score, color = income)) +
+  geom_point(alpha = 0.7) +
+  scale_x_log10(
+  labels = scales::label_number(
+    scale_cut = scales::cut_short_scale()
+  )
+) +
+  labs(
+    title = "Statistical Performance vs. Population Size (2023)",
+    x = "Population (log scale)",
+    y = "Overall SPI Score",
+    caption = "Each point = one country"
+  ) +
+  theme_minimal()
+```
+
+# Which Pillar Scores Lowest?
+
+We calculate the average score per pillar across all countries in 2023.
+
+```{r}
+spi_pillars <- spi_recent |>
+  summarise(
+    data_use = mean(data_use_score, na.rm = TRUE),
+    data_services = mean(data_services_score, na.rm = TRUE),
+    data_products = mean(data_products_score, na.rm = TRUE),
+    data_sources = mean(data_sources_score, na.rm = TRUE),
+    data_infra = mean(data_infrastructure_score, na.rm = TRUE)
+  ) |>
+  pivot_longer(everything(), names_to = "pillar", values_to = "score")
+
+ggplot(spi_pillars, aes(x = reorder(pillar, score), y = score, fill = pillar)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Average SPI Pillar Scores (2023)",
+    x = "Pillar",
+    y = "Average Score",
+    caption = "Data: World Bank SPI 2023"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+# Summary
+
+The SPI data reveal consistent improvement in statistical performance across all regions since 2004, particularly in high-income countries.
+However, data infrastructure and data sources pillars remain relatively weak compared with data use or services.
+Population size shows no strong correlation with SPI — suggesting that institutional quality matters more than scale.
+Future research could link SPI trends with governance or digital infrastructure indicators.
+
+# Function checklist
+	•	dplyr: filter(), mutate(), group_by(), summarise(), fct_relevel()
+	•	tidyr: pivot_longer()
+	•	ggplot2: geom_line(), geom_point(), geom_col(), facet_wrap()
+
+# Reference
