@@ -124,6 +124,7 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#applied-research-internships" id="toc-applied-research-internships" class="nav-link" data-scroll-target="#applied-research-internships">Applied research &amp; internships</a></li>
   </ul></li>
+  <li><a href="#what-i-like-to-work-on" id="toc-what-i-like-to-work-on" class="nav-link" data-scroll-target="#what-i-like-to-work-on">What I like to work on</a></li>
   <li><a href="#find-me" id="toc-find-me" class="nav-link" data-scroll-target="#find-me">Find me</a></li>
   </ul>
 </nav>
@@ -153,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="about-me" class="level1">
 <h1>About me</h1>
 <p>Hi, I’m <strong>Hui Yao (姚惠)</strong> — a ScM student in Biostatistics at Johns Hopkins Bloomberg School of Public Health.</p>
-<p>I am broadly interested in <strong>survival analysis</strong>, <strong>reproducible statistical workflows</strong>, and <strong>wearable / sensor-based health data</strong>.</p>
+<p>I am broadly interested in <strong>survival analysis</strong>, <strong>reproducible statistical workflows</strong>, and <strong>wearable / sensor-based health data</strong>. My current work includes building simulation pipelines to benchmark methods for reconstructing individual patient data (IPD) from Kaplan–Meier curves, with a focus on different censoring mechanisms, proportional vs non-proportional hazards, and robust evaluation metrics.</p>
 <p>Before joining Johns Hopkins, I completed my <strong>BSc in Statistics</strong> at the Southern University of Science and Technology (SUSTech) in Shenzhen, China, and spent a semester as a fully funded <strong>exchange student at the University of Notre Dame</strong>, where I deepened my training in numerical analysis, computational statistics, and data mining.</p>
 </section>
 <section id="experience" class="level1">
@@ -167,8 +168,20 @@ Led small-area estimation of child malnutrition at the cantonal level using cens
 Supported clinical collaborators with study design and data analysis, including t-tests, chi-squared tests, mediation and structural equation modeling, and wrote practical documentation for routine data workflows.</p></li>
 <li><p><strong>Gait and wearable data research (Prof.&nbsp;Jian Qing Shi’s group)</strong><br>
 Worked on multimodal datasets (gait, EEG, clinical scales) for early screening of neurodegenerative diseases, developed feature extraction pipelines and predictive models, and collaborated with hospitals and industry partners.</p></li>
+<li><p><strong>Parkinson’s disease motion data &amp; iGEM project</strong><br>
+Built feature computation scripts and classification models for sensor-based movement data; contributed ODE-based modeling and simulation for a synthetic biology project on Tyrian purple production.</p></li>
 </ul>
 </section>
+</section>
+<section id="what-i-like-to-work-on" class="level1">
+<h1>What I like to work on</h1>
+<p>I enjoy projects that:</p>
+<ul>
+<li>combine <strong>methodological rigor</strong> with <strong>real-world public health impact</strong>,</li>
+<li>require <strong>clean, reproducible code</strong> (R, Python, Git, Quarto),</li>
+<li>live at the intersection of <strong>statistics, computing, and domain knowledge</strong>.</li>
+</ul>
+<p>Outside of coursework and research, I like exploring new tools for workflow automation, visual storytelling with data, and sharing resources with peers who are also navigating biostatistics and data science training.</p>
 </section>
 <section id="find-me" class="level1">
 <h1>Find me</h1>
@@ -255,7 +268,7 @@ Worked on multimodal datasets (gait, EEG, clinical scales) for early screening o
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/HuiYao-Amber\.github\.io\/biostat777-intro-Hui-Yao");
+        var filterRegex = new RegExp("https:\/\/a3146a2d-0c9f-4f12-a1ad-579c46cff62d\.netlify\.app\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
